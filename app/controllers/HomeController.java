@@ -1,8 +1,5 @@
 package controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import data.Terminal;
 import play.libs.Json;
 import play.libs.ws.WSClient;
@@ -12,6 +9,7 @@ import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
 
@@ -50,13 +48,27 @@ public class HomeController extends Controller {
         // Create a list of Terminals to return in our response
         ArrayList<Terminal> terminalList = new ArrayList<Terminal>();
 
-        // Do your processing here
-        for(String line: lines) {
-            // look at each line and do some work
 
-            // Splitting on the ',' character here can pull out various fields of the CSV row
-            String terminalName = line.split(",")[0];
-            terminalList.add(new Terminal(terminalName));
+        // Look at the name of the first terminal in the csv (ignore line 0 which is a header)
+        String prevTerminalName = lines[1].split(",")[0];
+        String terminalName = "";
+        double flowValue;
+        String timestamp;
+
+        // Look through each line in the csv. When the terminal name changes, add the last line for the current terminal (most recent data) to the terminal list
+        for (int i = 1; i < 9999; i++) {
+            terminalName = lines[i].split(",")[0];
+            if (!Objects.equals(prevTerminalName, terminalName)) {
+                prevTerminalName = lines[i - 1].split(",")[0];
+                flowValue = Double.parseDouble(lines[i - 1].split(",")[2]);
+                timestamp = lines[i - 1].split(",")[3];
+                terminalList.add(new Terminal(prevTerminalName, flowValue, timestamp));
+                if (Objects.equals(terminalName, "Terminal Totals")) {
+                    break;
+                } else {
+                    prevTerminalName = terminalName;
+                }
+            }
         }
 
         // We convert the list of terminals automagically into JSON
