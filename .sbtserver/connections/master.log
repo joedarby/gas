@@ -1,0 +1,25 @@
+New log file opened at Wed Aug 31 19:12:05 BST 2016 by 1824@Laptop
+Taking next connection to: 56647
+New client attempting to connect on port: 56649-56647
+  Address = /192.168.1.109:56647
+This client on port 56649 has uuid 3f5a49c4-6119-4b6e-be50-b44874af8590 configName activator humanReadableName Activator protocolVersion 3 featureTags Vector()
+Connected Clients: activator-3f5a49c4-6119-4b6e-be50-b44874af8590
+Taking next connection to: 56647
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 56647
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 56647
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 56647
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 56647
+Checking to see if clients are empty...
+No non-daemon clients connected after 3 min. Shutting down.
+Server socket thread exiting.
+0 clients open, will close them...
+All client sockets have been closed.
+Closing the 1824@Laptop logs at Wed Aug 31 19:27:05 BST 2016, goodbye.
