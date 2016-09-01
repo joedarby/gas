@@ -1,32 +1,20 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import play.libs.Json;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
-import scala.concurrent.ExecutionContextExecutor;
-import scala.util.parsing.json.JSONArray;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-/**
- * This controller contains an action to handle HTTP requests
- * to the application's home page.
- */
+
 public class HomeController extends Controller {
 
     @Inject WSClient ws;
 
-    /**
-     * An action that renders an HTML page with a welcome message.
-     * The configuration in the <code>routes</code> file means that
-     * this method will be called when the application receives a
-     * <code>GET</code> request with a path of <code>/</code>.
-     */
     public Result index() {
 
         CompletionStage<WSResponse> futureResponse = ws.url("http://energywatch.natgrid.co.uk/EDP-PublicUI/Public/InstantaneousFlowsIntoNTS.aspx?CalledFrom=nguk")
