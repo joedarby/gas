@@ -19,14 +19,15 @@ public class HomeController extends Controller {
     // The WSClient is injected automatically by the framework
     // The WSClient is used to do HTTP requests to other services (eg, to grab our CSV)
     @Inject WSClient ws;
-    public String errorMsg;
 
     public Result index() {
 
         // Call the getCSV method returning response
-        WSResponse response = getCSV();
-        if (response == null) {
-            return internalServerError(errorMsg);
+        WSResponse response;
+        try {
+            response = getCSV();
+        } catch (Exception e) {
+            return internalServerError(e.toString());
         }
 
         // Get the CSV body
@@ -85,7 +86,7 @@ public class HomeController extends Controller {
 
 
 
-    public WSResponse getCSV(){
+    public WSResponse getCSV() throws Exception {
         // We need to request the CSV file from the national grid website
         //
         // This requires us to do a POST request to their server, passing some hard coded form parameters in the body
@@ -94,17 +95,8 @@ public class HomeController extends Controller {
                 .setContentType("application/x-www-form-urlencoded")
                 .post("__EVENTTARGET=a1&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwULLTEyMjEyNjg2NzlkGAIFDmd2SW5zdGFudFRhYmxlDzwrAAoBCAIBZAUGdGFibGUzDzwrAAoBCAIBZJ7q2q75hRISuNNRLVb%2BQrFJ%2Bj5M&__VIEWSTATEGENERATOR=27867E27&__EVENTVALIDATION=%2FwEWAwL%2Bn5W7DgK%2F7%2BbtDALDmNLsDhsc68eKkomPaNlEXMwXYS14SX%2Bw");
 
-        // Set the response to null initially
-        WSResponse response = null;
-
         // Attempt to request the CSV.
-        try {
-            response = futureResponse.toCompletableFuture().get();
-        } catch (Exception e ) { // If there is an error of any kind, catch it and show an error page
-            errorMsg = e.toString();
-            return null;
-        }
-        return response;
+        return futureResponse.toCompletableFuture().get();
     }
 
 }
