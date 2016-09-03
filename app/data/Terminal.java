@@ -1,5 +1,6 @@
 package data;
 
+
 public class Terminal {
 
     public String terminalName;
@@ -12,3 +13,5 @@ public class Terminal {
         timestamp = stamp;
     }
 }
+
+
