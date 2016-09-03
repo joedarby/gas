@@ -54,8 +54,16 @@ public class HomeController extends Controller {
                 timestamp = splitLine[3];
 
                 Terminal terminalToAdd = new Terminal(prevTerminalName, flowValue, timestamp);
-                String groupToAddTo = TerminalMap.getTerminalGroup(prevTerminalName);
-                terminalGroupList.get(groupToAddTo).addTerminal(terminalToAdd);
+
+                // If the new terminal maps into a terminal group, add to the existing group, otherwise create and add its own group
+                if (TerminalMap.getTerminalGroup(prevTerminalName) == null) {
+                    TerminalGroup singularTerminalGroup = new TerminalGroup(prevTerminalName);
+                    singularTerminalGroup.addTerminal(terminalToAdd);
+                    terminalGroupList.put(prevTerminalName, singularTerminalGroup);
+                } else {
+                    String groupToAddTo = TerminalMap.getTerminalGroup(prevTerminalName);
+                    terminalGroupList.get(groupToAddTo).addTerminal(terminalToAdd);
+                }
 
                 if (Objects.equals(terminalName, "Terminal Totals")) {
                     break;

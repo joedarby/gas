@@ -31,13 +31,18 @@ public class TerminalMap {
         terminalMapping.put("STUBLACH", "MEDIUM RANGE STORAGE");
         terminalMapping.put("GRAIN NTS 1", "ISLE OF GRAIN");
         terminalMapping.put("GRAIN NTS 2", "ISLE OF GRAIN");
-        terminalMapping.put("BARROW SOUTH", "BARROW");
-        terminalMapping.put("THEDDLETHORPE", "THEDDLETHORPE");
+        terminalMapping.put("EASINGTON DIMLINGTON", "EASINGTON");
+        terminalMapping.put("EASINGTON LANGELED", "EASINGTON");
+        terminalMapping.put("AVONMOUTH", "LNG STORAGE");
+        terminalMapping.put("GLENMAVIS", "LNG STORAGE");
+        terminalMapping.put("DYNEVOR ARMS", "LNG STORAGE");
+        terminalMapping.put("PARTINGTON", "LNG STORAGE");
+        terminalMapping.put("MILFORD HAVEN - SOUTH HOOK", "MILFORD HAVEN");
+        terminalMapping.put("MILFORD HAVEN - DRAGON", "MILFORD HAVEN");
 
         for ( Object value : terminalMapping.values() ) {
             terminalGroupNames.add((String) value);
         }
-        terminalGroupNames.add("OTHER");
     }
 
     //Given terminal name, return terminal group name
@@ -47,7 +52,7 @@ public class TerminalMap {
         if (map.containsKey(tName)) {
             groupToAddTo = (String) map.get(tName);
         } else {
-            groupToAddTo = "OTHER";
+            groupToAddTo = null;
         }
         return groupToAddTo;
     }
