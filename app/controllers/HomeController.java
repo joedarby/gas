@@ -36,23 +36,13 @@ public class HomeController extends Controller {
         // Split the CSV into an array of lines, using the split command, passing the 'newline' (\n) character as the character to split on
         String[] lines = body.split("\n");
 
-        // Create Terminal to TerminalGroup mapping
-        TerminalMap terminalMap = new TerminalMap();
-        HashMap terminalMapping = terminalMap.terminalMapping;
-        Set<String> terminalGroupNames = terminalMap.terminalGroupNames;
-
-        // Create a list of Terminal Groups to return in our response and populate with empty Terminal Groups
-        HashMap<String, TerminalGroup> terminalGroupList = new HashMap<>();
-        for (String terminalGroupName : terminalGroupNames) {
-            TerminalGroup terminalGroup = new TerminalGroup(terminalGroupName);
-            terminalGroupList.put(terminalGroupName, terminalGroup);
-        }
-
-        // Look at the name of the first terminal in the csv (ignore line 0 which is a header)
-        String prevTerminalName = lines[1].split(",")[0];
         String terminalName;
         Double flowValue;
         String timestamp;
+        HashMap<String, TerminalGroup> terminalGroupList = TerminalMap.initiateTerminalGroupList();
+
+      // Look at the name of the first terminal in the csv (ignore line 0 which is a header)
+        String prevTerminalName = lines[1].split(",")[0];
 
         // Look through each line in the csv. When the terminal name changes, add the last line for the current terminal (most recent data) to the terminal list
         for (int i = 1; i < lines.length; i++) {
@@ -62,14 +52,11 @@ public class HomeController extends Controller {
                 prevTerminalName = splitLine[0];
                 flowValue = Double.parseDouble(splitLine[2]);
                 timestamp = splitLine[3];
+
                 Terminal terminalToAdd = new Terminal(prevTerminalName, flowValue, timestamp);
-                String groupToAddTo;
-                if (terminalMapping.containsKey(prevTerminalName)) {
-                    groupToAddTo = (String) terminalMapping.get(prevTerminalName);
-                } else {
-                    groupToAddTo = "OTHER";
-                }
+                String groupToAddTo = TerminalMap.getTerminalGroup(prevTerminalName);
                 terminalGroupList.get(groupToAddTo).addTerminal(terminalToAdd);
+
                 if (Objects.equals(terminalName, "Terminal Totals")) {
                     break;
                 } else {
