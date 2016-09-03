@@ -62,9 +62,9 @@ public class HomeController extends Controller {
 
         // Look at the name of the first terminal in the csv (ignore line 0 which is a header)
         String prevTerminalName = lines[1].split(",")[0];
-        String terminalName = "";
-        double flowValue = 0;
-        String timestamp = "";
+        String terminalName;
+        Double flowValue;
+        String timestamp;
 
         // Look through each line in the csv. When the terminal name changes, add the last line for the current terminal (most recent data) to the terminal list
         for (int i = 1; i < 9999; i++) {

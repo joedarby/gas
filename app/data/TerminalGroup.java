@@ -8,26 +8,18 @@ import java.util.ArrayList;
 public class TerminalGroup {
 
     public ArrayList<Terminal> terminals = new ArrayList<>();
-    public double groupTotalFlow;
+    public double groupTotalFlow = 0.0;
     public String groupTimestamp;
     public String terminalGroupName;
 
-
-
     public TerminalGroup(String name) {
         terminalGroupName = name;
-
     }
-
 
     public TerminalGroup addTerminal(Terminal term) {
         terminals.add(term);
         groupTimestamp = terminals.get(0).timestamp;
-        for ( Terminal terminal : terminals) {
-            groupTotalFlow = groupTotalFlow + terminal.flowValue;
-        }
+        groupTotalFlow = groupTotalFlow + term.flowValue;
         return this;
     }
-
-
 }
