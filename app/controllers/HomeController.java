@@ -19,31 +19,14 @@ public class HomeController extends Controller {
     // The WSClient is injected automatically by the framework
     // The WSClient is used to do HTTP requests to other services (eg, to grab our CSV)
     @Inject WSClient ws;
+    public String errorMsg;
 
     public Result index() {
 
-        // Create terminal to terminal group mapping
-        TerminalMap terminalMap = new TerminalMap();
-        HashMap terminalMapping = terminalMap.terminalMapping;
-        Set<String> terminalGroupNames = terminalMap.terminalGroupNames;
-
-
-        // We need to request the CSV file from the national grid website
-        //
-        // This requires us to do a POST request to their server, passing some hard coded form parameters in the body
-        // of the request
-        CompletionStage<WSResponse> futureResponse = ws.url("http://energywatch.natgrid.co.uk/EDP-PublicUI/Public/InstantaneousFlowsIntoNTS.aspx?CalledFrom=nguk")
-                .setContentType("application/x-www-form-urlencoded")
-                .post("__EVENTTARGET=a1&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwULLTEyMjEyNjg2NzlkGAIFDmd2SW5zdGFudFRhYmxlDzwrAAoBCAIBZAUGdGFibGUzDzwrAAoBCAIBZJ7q2q75hRISuNNRLVb%2BQrFJ%2Bj5M&__VIEWSTATEGENERATOR=27867E27&__EVENTVALIDATION=%2FwEWAwL%2Bn5W7DgK%2F7%2BbtDALDmNLsDhsc68eKkomPaNlEXMwXYS14SX%2Bw");
-
-        // Set the response to null initially
-        WSResponse response = null;
-
-        // Attempt to request the CSV.
-        try {
-                response = futureResponse.toCompletableFuture().get();
-        } catch (Exception e ) { // If there is an error of any kind, catch it and show an error page
-            return internalServerError(e.toString());
+        // Call the getCSV method returning response
+        WSResponse response = getCSV();
+        if (response == null) {
+            return internalServerError(errorMsg);
         }
 
         // Get the CSV body
@@ -52,13 +35,17 @@ public class HomeController extends Controller {
         // Split the CSV into an array of lines, using the split command, passing the 'newline' (\n) character as the character to split on
         String[] lines = body.split("\n");
 
+        // Create Terminal to TerminalGroup mapping
+        TerminalMap terminalMap = new TerminalMap();
+        HashMap terminalMapping = terminalMap.terminalMapping;
+        Set<String> terminalGroupNames = terminalMap.terminalGroupNames;
+
         // Create a list of Terminal Groups to return in our response and populate with empty Terminal Groups
         HashMap<String, TerminalGroup> terminalGroupList = new HashMap<>();
         for (String terminalGroupName : terminalGroupNames) {
             TerminalGroup terminalGroup = new TerminalGroup(terminalGroupName);
             terminalGroupList.put(terminalGroupName, terminalGroup);
         }
-
 
         // Look at the name of the first terminal in the csv (ignore line 0 which is a header)
         String prevTerminalName = lines[1].split(",")[0];
@@ -90,13 +77,34 @@ public class HomeController extends Controller {
             }
         }
 
+        //Take terminal groups out of HashMap, put into Array list and return as Json
+        ArrayList<TerminalGroup> terminalGroupsOutput = new ArrayList<>();
+        terminalGroupsOutput.addAll(terminalGroupList.values());
+        return ok(Json.toJson(terminalGroupsOutput));
+    }
 
 
 
+    public WSResponse getCSV(){
+        // We need to request the CSV file from the national grid website
+        //
+        // This requires us to do a POST request to their server, passing some hard coded form parameters in the body
+        // of the request
+        CompletionStage<WSResponse> futureResponse = ws.url("http://energywatch.natgrid.co.uk/EDP-PublicUI/Public/InstantaneousFlowsIntoNTS.aspx?CalledFrom=nguk")
+                .setContentType("application/x-www-form-urlencoded")
+                .post("__EVENTTARGET=a1&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwULLTEyMjEyNjg2NzlkGAIFDmd2SW5zdGFudFRhYmxlDzwrAAoBCAIBZAUGdGFibGUzDzwrAAoBCAIBZJ7q2q75hRISuNNRLVb%2BQrFJ%2Bj5M&__VIEWSTATEGENERATOR=27867E27&__EVENTVALIDATION=%2FwEWAwL%2Bn5W7DgK%2F7%2BbtDALDmNLsDhsc68eKkomPaNlEXMwXYS14SX%2Bw");
 
+        // Set the response to null initially
+        WSResponse response = null;
 
-        // We convert the list of terminals automagically into JSON
-        return ok(Json.toJson(terminalGroupList));
+        // Attempt to request the CSV.
+        try {
+            response = futureResponse.toCompletableFuture().get();
+        } catch (Exception e ) { // If there is an error of any kind, catch it and show an error page
+            errorMsg = e.toString();
+            return null;
+        }
+        return response;
     }
 
 }
