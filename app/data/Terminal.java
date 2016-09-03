@@ -12,6 +12,7 @@ public class Terminal {
         flowValue = flow;
         timestamp = stamp;
     }
+
 }
 
 

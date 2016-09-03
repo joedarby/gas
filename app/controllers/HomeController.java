@@ -55,7 +55,7 @@ public class HomeController extends Controller {
         String timestamp;
 
         // Look through each line in the csv. When the terminal name changes, add the last line for the current terminal (most recent data) to the terminal list
-        for (int i = 1; i < 9999; i++) {
+        for (int i = 1; i < lines.length; i++) {
             terminalName = lines[i].split(",")[0];
             if (!Objects.equals(prevTerminalName, terminalName)) {
                 String[] splitLine = lines[i - 1].split(",");
@@ -78,12 +78,9 @@ public class HomeController extends Controller {
             }
         }
 
-        //Take terminal groups out of HashMap, put into Array list and return as Json
-        ArrayList<TerminalGroup> terminalGroupsOutput = new ArrayList<>();
-        terminalGroupsOutput.addAll(terminalGroupList.values());
-        return ok(Json.toJson(terminalGroupsOutput));
+        //Return terminal groups from HashMap as Json
+        return ok(Json.toJson(terminalGroupList.values()));
     }
-
 
 
     public WSResponse getCSV() throws Exception {
