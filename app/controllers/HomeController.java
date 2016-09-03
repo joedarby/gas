@@ -2,6 +2,7 @@ package controllers;
 
 import data.Terminal;
 import data.TerminalGroup;
+import data.TerminalMap;
 import play.libs.Json;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSResponse;
@@ -9,9 +10,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CompletionStage;
 
 
@@ -24,30 +23,9 @@ public class HomeController extends Controller {
     public Result index() {
 
         // Create terminal to terminal group mapping
-        HashMap terminalMap = new HashMap();
-        terminalMap.put("BACTON BBL", "BACTON IP");
-        terminalMap.put("BACTON IC", "BACTON IP");
-        terminalMap.put("BACTON PERENCO", "BACTON UKCS");
-        terminalMap.put("BACTON SEAL", "BACTON UKCS");
-        terminalMap.put("BACTON SHELL", "BACTON UKCS");
-        terminalMap.put("ST FERGUS MOBIL", "ST FERGUS");
-        terminalMap.put("ST FERGUS NSMP", "ST FERGUS");
-        terminalMap.put("ST FERGUS SHELL", "ST FERGUS");
-        terminalMap.put("TEESSIDE PX", "TEESSIDE");
-        terminalMap.put("TEESSIDE BP", "TEESSIDE");
-        terminalMap.put("ALDBROUGH", "MEDIUM RANGE STORAGE");
-        terminalMap.put("HILLTOP", "MEDIUM RANGE STORAGE");
-        terminalMap.put("HOLE HOUSE FARM", "MEDIUM RANGE STORAGE");
-        terminalMap.put("HOLFORD", "MEDIUM RANGE STORAGE");
-        terminalMap.put("HORNSEA", "MEDIUM RANGE STORAGE");
-        terminalMap.put("STUBLACH", "MEDIUM RANGE STORAGE");
-        terminalMap.put("GRAIN NTS 1", "ISLE OF GRAIN");
-        terminalMap.put("GRAIN NTS 2", "ISLE OF GRAIN");
-        terminalMap.put("BARROW SOUTH", "BARROW");
-        terminalMap.put("THEDDLETHORPE", "THEDDLETHORPE");
-
-        String[] terminalGroupNames = {"BACTON IP", "BACTON UKCS", "BARROW", "ISLE OF GRAIN", "ST FERGUS", "TEESSIDE", "THEDDLETHORPE", "MEDIUM RANGE STORAGE", "OTHER"};
-
+        TerminalMap terminalMap = new TerminalMap();
+        HashMap terminalMapping = terminalMap.terminalMapping;
+        Set<String> terminalGroupNames = terminalMap.terminalGroupNames;
 
 
         // We need to request the CSV file from the national grid website
@@ -92,20 +70,18 @@ public class HomeController extends Controller {
         for (int i = 1; i < 9999; i++) {
             terminalName = lines[i].split(",")[0];
             if (!Objects.equals(prevTerminalName, terminalName)) {
-                prevTerminalName = lines[i - 1].split(",")[0];
-                flowValue = Double.parseDouble(lines[i - 1].split(",")[2]);
-                timestamp = lines[i - 1].split(",")[3];
+                String[] splitLine = lines[i - 1].split(",");
+                prevTerminalName = splitLine[0];
+                flowValue = Double.parseDouble(splitLine[2]);
+                timestamp = splitLine[3];
                 Terminal terminalToAdd = new Terminal(prevTerminalName, flowValue, timestamp);
                 String groupToAddTo;
-                if (terminalMap.containsKey(prevTerminalName)) {
-                    groupToAddTo = (String) terminalMap.get(prevTerminalName);
+                if (terminalMapping.containsKey(prevTerminalName)) {
+                    groupToAddTo = (String) terminalMapping.get(prevTerminalName);
                 } else {
-                    groupToAddTo = "Other";
+                    groupToAddTo = "OTHER";
                 }
-                TerminalGroup targetTerminalGroup = terminalGroupList.get(groupToAddTo);
-                terminalGroupList.remove(groupToAddTo);
-                targetTerminalGroup.addTerminal(terminalToAdd);
-                terminalGroupList.put(groupToAddTo, targetTerminalGroup);
+                terminalGroupList.get(groupToAddTo).addTerminal(terminalToAdd);
                 if (Objects.equals(terminalName, "Terminal Totals")) {
                     break;
                 } else {
