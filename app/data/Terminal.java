@@ -1,18 +1,24 @@
 package data;
 
+import java.util.ArrayList;
 
+/**
+ * Created by Joe on 03/09/2016.
+ */
 public class Terminal {
-
     public String terminalName;
-    public double flowValue;
-    public String timestamp;
+    public String terminalTimestamp;
+    public double terminalFlow = 0.0;
+    public ArrayList<Pipeline> pipelines = new ArrayList<>();
 
-    public Terminal(String name, double flow, String stamp) {
+    public Terminal(String name) {
         terminalName = name;
-        flowValue = flow;
-        timestamp = stamp;
     }
 
+    public Terminal addPipeline(Pipeline pipe) {
+        pipelines.add(pipe);
+        terminalTimestamp = pipelines.get(0).timestamp;
+        terminalFlow = terminalFlow + pipe.flowValue;
+        return this;
+    }
 }
-
-

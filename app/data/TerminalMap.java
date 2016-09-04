@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public class TerminalMap {
     public HashMap terminalMapping = new HashMap();
-    public Set<String> terminalGroupNames = new HashSet<>();
+    public Set<String> terminalNames = new HashSet<>();
 
     public TerminalMap() {
 
@@ -41,30 +41,30 @@ public class TerminalMap {
         terminalMapping.put("MILFORD HAVEN - DRAGON", "MILFORD HAVEN");
 
         for ( Object value : terminalMapping.values() ) {
-            terminalGroupNames.add((String) value);
+            terminalNames.add((String) value);
         }
     }
 
-    //Given terminal name, return terminal group name
-    public static String getTerminalGroup(String tName) {
+    //Given pipeline name, return terminal name
+    public static String getTerminal(String tName) {
         HashMap map = new TerminalMap().terminalMapping;
-        String groupToAddTo;
+        String terminalToAddTo;
         if (map.containsKey(tName)) {
-            groupToAddTo = (String) map.get(tName);
+            terminalToAddTo = (String) map.get(tName);
         } else {
-            groupToAddTo = null;
+            terminalToAddTo = null;
         }
-        return groupToAddTo;
+        return terminalToAddTo;
     }
 
-    // Generate an empty HashMap of the terminal groups
-    public static HashMap<String, TerminalGroup> initiateTerminalGroupList() {
-        Set<String> terminalGroupNames = new TerminalMap().terminalGroupNames;
-        HashMap<String, TerminalGroup> terminalGroupList = new HashMap<>();
-        for (String terminalGroupName : terminalGroupNames) {
-            TerminalGroup terminalGroup = new TerminalGroup(terminalGroupName);
-            terminalGroupList.put(terminalGroupName, terminalGroup);
+    // Generate an empty HashMap of the terminals
+    public static HashMap<String, Terminal> initiateTerminalList() {
+        Set<String> terminalNames = new TerminalMap().terminalNames;
+        HashMap<String, Terminal> terminalList = new HashMap<>();
+        for (String terminalName : terminalNames) {
+            Terminal terminal = new Terminal(terminalName);
+            terminalList.put(terminalName, terminal);
         }
-        return terminalGroupList;
+        return terminalList;
     }
 }
