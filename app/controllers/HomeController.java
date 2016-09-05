@@ -18,7 +18,8 @@ public class HomeController extends Controller {
 
     // The WSClient is injected automatically by the framework
     // The WSClient is used to do HTTP requests to other services (eg, to grab our CSV)
-    @Inject WSClient ws;
+    @Inject
+    private WSClient ws;
 
     public Result index() {
 
@@ -78,7 +79,7 @@ public class HomeController extends Controller {
     }
 
 
-    public WSResponse getCSV() throws Exception {
+    private WSResponse getCSV() throws Exception {
         // We need to request the CSV file from the national grid website
         //
         // This requires us to do a POST request to their server, passing some hard coded form parameters in the body

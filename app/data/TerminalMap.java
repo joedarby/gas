@@ -8,10 +8,10 @@ import java.util.Set;
  * Created by Joe on 03/09/2016.
  */
 public class TerminalMap {
-    public HashMap terminalMapping = new HashMap();
-    public Set<String> terminalNames = new HashSet<>();
+    private final HashMap<String, String> terminalMapping = new HashMap<>();
+    private final Set<String> terminalNames = new HashSet<>();
 
-    public TerminalMap() {
+    private TerminalMap() {
 
         terminalMapping.put("BACTON BBL", "Bacton IP");
         terminalMapping.put("BACTON IC", "Bacton IP");
@@ -43,9 +43,7 @@ public class TerminalMap {
         terminalMapping.put("BARROW SOUTH", "Barrow");
         terminalMapping.put("EASINGTON ROUGH", "Rough Storage");
 
-        for ( Object value : terminalMapping.values() ) {
-            terminalNames.add((String) value);
-        }
+        terminalNames.addAll(terminalMapping.values());
     }
 
     //Given pipeline name, return terminal name
