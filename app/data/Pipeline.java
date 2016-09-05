@@ -1,6 +1,8 @@
 package data;
 
 
+import java.util.HashMap;
+
 public class Pipeline {
 
     public String pipelineName;

@@ -13,32 +13,35 @@ public class TerminalMap {
 
     public TerminalMap() {
 
-        terminalMapping.put("BACTON BBL", "BACTON IP");
-        terminalMapping.put("BACTON IC", "BACTON IP");
-        terminalMapping.put("BACTON PERENCO", "BACTON UKCS");
-        terminalMapping.put("BACTON SEAL", "BACTON UKCS");
-        terminalMapping.put("BACTON SHELL", "BACTON UKCS");
-        terminalMapping.put("ST FERGUS MOBIL", "ST FERGUS");
-        terminalMapping.put("ST FERGUS NSMP", "ST FERGUS");
-        terminalMapping.put("ST FERGUS SHELL", "ST FERGUS");
-        terminalMapping.put("TEESSIDE PX", "TEESSIDE");
-        terminalMapping.put("TEESSIDE BP", "TEESSIDE");
-        terminalMapping.put("ALDBROUGH", "MEDIUM RANGE STORAGE");
-        terminalMapping.put("HILLTOP", "MEDIUM RANGE STORAGE");
-        terminalMapping.put("HOLE HOUSE FARM", "MEDIUM RANGE STORAGE");
-        terminalMapping.put("HOLFORD", "MEDIUM RANGE STORAGE");
-        terminalMapping.put("HORNSEA", "MEDIUM RANGE STORAGE");
-        terminalMapping.put("STUBLACH", "MEDIUM RANGE STORAGE");
-        terminalMapping.put("GRAIN NTS 1", "ISLE OF GRAIN");
-        terminalMapping.put("GRAIN NTS 2", "ISLE OF GRAIN");
-        terminalMapping.put("EASINGTON DIMLINGTON", "EASINGTON");
-        terminalMapping.put("EASINGTON LANGELED", "EASINGTON");
-        terminalMapping.put("AVONMOUTH", "LNG STORAGE");
-        terminalMapping.put("GLENMAVIS", "LNG STORAGE");
-        terminalMapping.put("DYNEVOR ARMS", "LNG STORAGE");
-        terminalMapping.put("PARTINGTON", "LNG STORAGE");
-        terminalMapping.put("MILFORD HAVEN - SOUTH HOOK", "MILFORD HAVEN");
-        terminalMapping.put("MILFORD HAVEN - DRAGON", "MILFORD HAVEN");
+        terminalMapping.put("BACTON BBL", "Bacton IP");
+        terminalMapping.put("BACTON IC", "Bacton IP");
+        terminalMapping.put("BACTON PERENCO", "Bacton UKCS");
+        terminalMapping.put("BACTON SEAL", "Bacton UKCS");
+        terminalMapping.put("BACTON SHELL", "Bacton UKCS");
+        terminalMapping.put("ST FERGUS MOBIL", "St Fergus");
+        terminalMapping.put("ST FERGUS NSMP", "St Fergus");
+        terminalMapping.put("ST FERGUS SHELL", "St Fergus");
+        terminalMapping.put("TEESSIDE PX", "Teesside");
+        terminalMapping.put("TEESSIDE BP", "Teesside");
+        terminalMapping.put("ALDBROUGH", "Medium Range Storage");
+        terminalMapping.put("HILLTOP", "Medium Range Storage");
+        terminalMapping.put("HOLE HOUSE FARM", "Medium Range Storage");
+        terminalMapping.put("HOLFORD", "Medium Range Storage");
+        terminalMapping.put("HORNSEA", "Medium Range Storage");
+        terminalMapping.put("STUBLACH", "Medium Range Storage");
+        terminalMapping.put("GRAIN NTS 1", "Isle of Grain");
+        terminalMapping.put("GRAIN NTS 2", "Isle of Grain");
+        terminalMapping.put("EASINGTON DIMLINGTON", "Easington");
+        terminalMapping.put("EASINGTON LANGELED", "Easington");
+        terminalMapping.put("AVONMOUTH", "LNG Storage");
+        terminalMapping.put("GLENMAVIS", "LNG Storage");
+        terminalMapping.put("DYNEVOR ARMS", "LNG Storage");
+        terminalMapping.put("PARTINGTON", "LNG Storage");
+        terminalMapping.put("MILFORD HAVEN - SOUTH HOOK", "Milford Haven");
+        terminalMapping.put("MILFORD HAVEN - DRAGON", "Milford Haven");
+        terminalMapping.put("THEDDLETHORPE", "Theddlethorpe");
+        terminalMapping.put("BARROW SOUTH", "Barrow");
+        terminalMapping.put("EASINGTON ROUGH", "Rough Storage");
 
         for ( Object value : terminalMapping.values() ) {
             terminalNames.add((String) value);
