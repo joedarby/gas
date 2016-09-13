@@ -74,8 +74,12 @@ public class HomeController extends Controller {
             }
         }
 
+        //
+        List<Terminal> finalTerminals = new ArrayList<>(terminalList.values());
+        Collections.sort(finalTerminals);
+
         //Return terminals from HashMap as Json
-        return ok(Json.toJson(terminalList.values()));
+        return ok(Json.toJson(finalTerminals));
     }
 
 

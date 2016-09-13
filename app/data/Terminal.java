@@ -7,7 +7,7 @@ import java.util.HashMap;
  * Created by Joe on 03/09/2016.
  */
 @SuppressWarnings("WeakerAccess")
-public class Terminal {
+public class Terminal implements Comparable<Terminal> {
     public String terminalName;
     public String terminalTimestamp;
     public double terminalFlow = 0.0;
@@ -45,6 +45,14 @@ public class Terminal {
         PIPELINE_TRANSLATE.put("EASINGTON ROUGH", "Rough Storage");
     }
 
+    @Override
+        public int compareTo(Terminal another) {
+            if (this.terminalFlow < another.terminalFlow) {
+                return 1;
+            } else {
+                return -1;
+            }
+    }
 
     public Terminal(String name) {
         terminalName = name;
