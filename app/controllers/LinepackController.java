@@ -1,17 +1,15 @@
 package controllers;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import play.libs.XPath;
+import data.LinepackDataSet;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import play.libs.Json;
 import play.libs.ws.WSClient;
-import play.libs.ws.WSRequest;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import javax.xml.xpath.XPathFactory;
-import java.io.File;
 import java.util.concurrent.CompletionStage;
 
 /**
@@ -24,33 +22,17 @@ public class LinepackController extends Controller{
 
     public Result index() {
 
-        byte[] page;
+        Document doc;
         try {
-             page = getPage().asByteArray();
+             doc = Jsoup.parse(getPage().getBody());
         } catch (Exception e) {
             return internalServerError(e.toString());
         }
 
-        return ok(page);
+        LinepackDataSet data = new LinepackDataSet(doc);
 
+        return ok(Json.toJson(data));
 
-        /*
-        //Code below does not work. Seems treating WSResponse as XML is disallowed.
-
-        Document page;
-
-        try {
-            page = getPage().asXml();
-        } catch (Exception e) {
-            return internalServerError(e.toString());
-        }
-
-        Element ele = page.getElementById("c100_cphActual_txtOpening");
-        String OLP = ele.toString();
-
-        return ok(OLP);
-
-        */
 
     }
 
