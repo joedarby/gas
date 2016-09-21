@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SBT: org.webjars:strip-json-comments:1.0.2-1:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/org.webjars/strip-json-comments/jars/strip-json-comments-1.0.2-1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

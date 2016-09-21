@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SBT: org.scala-sbt:sbt-core-next:0.1.1:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/scala_2.10/sbt_0.13/org.scala-sbt/sbt-core-next/jars/sbt-core-next-0.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

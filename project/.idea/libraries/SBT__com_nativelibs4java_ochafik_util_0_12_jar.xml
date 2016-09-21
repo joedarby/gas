@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="SBT: com.nativelibs4java:ochafik-util:0.12:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.nativelibs4java/ochafik-util/jars/ochafik-util-0.12.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.nativelibs4java/ochafik-util/srcs/ochafik-util-0.12-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

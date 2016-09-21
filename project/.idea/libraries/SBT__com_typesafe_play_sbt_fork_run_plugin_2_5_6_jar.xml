@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SBT: com.typesafe.play:sbt-fork-run-plugin:2.5.6:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/scala_2.10/sbt_0.13/com.typesafe.play/sbt-fork-run-plugin/jars/sbt-fork-run-plugin-2.5.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

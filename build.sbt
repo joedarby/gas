@@ -1,5 +1,7 @@
 name := """play-java"""
 
+resolvers += Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns)
+
 version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)

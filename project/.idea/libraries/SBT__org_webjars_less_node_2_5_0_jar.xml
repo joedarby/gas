@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SBT: org.webjars:less-node:2.5.0:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/org.webjars/less-node/jars/less-node-2.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

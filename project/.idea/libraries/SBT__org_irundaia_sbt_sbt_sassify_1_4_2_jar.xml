@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SBT: org.irundaia.sbt:sbt-sassify:1.4.2:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/scala_2.10/sbt_0.13/org.irundaia.sbt/sbt-sassify/jars/sbt-sassify-1.4.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
