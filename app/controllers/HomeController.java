@@ -14,6 +14,9 @@ import javax.inject.Inject;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletionStage;
 
@@ -111,7 +114,7 @@ public class HomeController extends Controller {
         Connection connection = database.getConnection();
 
         try {
-            String createStatement = "CREATE TABLE IF NOT EXISTS terminals (timestamp VARCHAR";
+            String createStatement = "CREATE TABLE IF NOT EXISTS terminals (timestamp DATETIME";
             String insertStatement = "INSERT INTO terminals (timestamp";
             for (String name : TerminalMap.terminalNames) {
                 createStatement += ", \"" + name + "\" DECIMAL";
@@ -129,7 +132,14 @@ public class HomeController extends Controller {
             connection.prepareCall(createStatement).execute();
 
             CallableStatement insert = connection.prepareCall(insertStatement);
-            insert.setString(1, terms.get(0).terminalTimestamp);
+
+            try {
+                Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(terms.get(0).terminalTimestamp);
+                Timestamp timestamp = new Timestamp(date.getTime());
+                insert.setTimestamp(1, timestamp);
+            } catch (ParseException e) {
+                System.out.println(e.toString());
+            }
 
             for (Terminal terminal : terms ) {
                 int i = 2;
@@ -140,17 +150,13 @@ public class HomeController extends Controller {
                 }
             }
             insert.execute();
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
             connection.close();
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
 }

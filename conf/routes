@@ -5,4 +5,5 @@
 GET     /terminals                  controllers.HomeController.terminalIndex
 GET     /linepack                   controllers.LinepackController.index
 GET     /db                         controllers.DatabaseDisplayController.index
+GET     /db:name                    controllers.DatabaseOutputTerminal.index(name)
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
