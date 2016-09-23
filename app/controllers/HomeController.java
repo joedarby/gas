@@ -3,6 +3,7 @@ package controllers;
 import data.Pipeline;
 import data.Terminal;
 import data.TerminalMap;
+import play.db.Database;
 import play.libs.Json;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSResponse;
@@ -10,6 +11,9 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.CompletionStage;
 
@@ -21,7 +25,10 @@ public class HomeController extends Controller {
     @Inject
     private WSClient ws;
 
-    public Result index() {
+    @Inject
+    Database database;
+
+    public Result terminalIndex() {
 
         // Call the getCSV method returning response
         WSResponse response;
@@ -78,8 +85,12 @@ public class HomeController extends Controller {
         List<Terminal> finalTerminals = new ArrayList<>(terminalList.values());
         Collections.sort(finalTerminals);
 
+        dbBuilder(finalTerminals);
+
         //Return terminals from HashMap as Json
         return ok(Json.toJson(finalTerminals));
+
+
     }
 
 
@@ -94,6 +105,52 @@ public class HomeController extends Controller {
 
         // Attempt to request the CSV.
         return futureResponse.toCompletableFuture().get();
+    }
+
+    public void dbBuilder(List<Terminal> terms) {
+        Connection connection = database.getConnection();
+
+        try {
+            String createStatement = "CREATE TABLE IF NOT EXISTS terminals (timestamp VARCHAR";
+            String insertStatement = "INSERT INTO terminals (timestamp";
+            for (String name : TerminalMap.terminalNames) {
+                createStatement += ", \"" + name + "\" DECIMAL";
+                insertStatement += ", \"" + name + "\"";
+
+            }
+            createStatement += ")";
+
+            insertStatement += ") VALUES (?";
+            for  (int i = 0; i < TerminalMap.terminalNames.size(); i++) {
+                insertStatement += ", ?";
+            }
+            insertStatement += ")";
+
+            connection.prepareCall(createStatement).execute();
+
+            CallableStatement insert = connection.prepareCall(insertStatement);
+            insert.setString(1, terms.get(0).terminalTimestamp);
+
+            for (Terminal terminal : terms ) {
+                int i = 2;
+                for (String terminalName : TerminalMap.terminalNames) {
+                    if (terminal.terminalName.equals(terminalName)) {
+                        insert.setDouble(i, terminal.terminalFlow);
+                    } else { i += 1;}
+                }
+            }
+            insert.execute();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

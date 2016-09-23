@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public class TerminalMap {
     private final HashMap<String, String> terminalMapping = new HashMap<>();
-    private final Set<String> terminalNames = new HashSet<>();
+    public static Set<String> terminalNames = new HashSet<>();
 
     private TerminalMap() {
 
@@ -44,6 +44,7 @@ public class TerminalMap {
         terminalMapping.put("EASINGTON ROUGH", "Rough Storage");
 
         terminalNames.addAll(terminalMapping.values());
+
     }
 
     //Given pipeline name, return terminal name
@@ -68,4 +69,5 @@ public class TerminalMap {
         }
         return terminalList;
     }
+
 }
