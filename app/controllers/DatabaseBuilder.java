@@ -19,6 +19,7 @@ import java.util.List;
 public class DatabaseBuilder {
     Connection connection;
     List<Terminal> terminals;
+    Timestamp timestamp;
 
     public DatabaseBuilder(Database database, List<Terminal> terms) {
         connection = database.getConnection();
@@ -47,7 +48,7 @@ public class DatabaseBuilder {
     public boolean dbCheckDuplicate() {
         try {
             Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(terminals.get(0).terminalTimestamp);
-            Timestamp timestamp = new Timestamp(date.getTime());
+            timestamp = new Timestamp(date.getTime());
             String selectStatement = "SELECT count(*) FROM terminals WHERE timestamp = " + timestamp;
             return connection.prepareCall(selectStatement).execute();
         } catch (SQLException | ParseException e) {
@@ -68,6 +69,7 @@ public class DatabaseBuilder {
 
         try {
             CallableStatement insert = connection.prepareCall(insertStatement);
+            insert.setTimestamp(1, timestamp);
             for (Terminal terminal : terminals) {
                 int i = 2;
                 for (String terminalName : TerminalMap.terminalNames) {
