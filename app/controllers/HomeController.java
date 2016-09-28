@@ -114,7 +114,7 @@ public class HomeController extends Controller {
         Connection connection = database.getConnection();
 
         try {
-            String createStatement = "CREATE TABLE IF NOT EXISTS terminals (timestamp DATETIME";
+            String createStatement = "CREATE TABLE IF NOT EXISTS terminals (timestamp TIMESTAMP";
             String insertStatement = "INSERT INTO terminals (timestamp";
             for (String name : TerminalMap.terminalNames) {
                 createStatement += ", \"" + name + "\" DECIMAL";
