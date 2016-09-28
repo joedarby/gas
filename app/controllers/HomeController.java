@@ -154,7 +154,7 @@ public class HomeController extends Controller {
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
     }
