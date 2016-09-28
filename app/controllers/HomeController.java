@@ -11,12 +11,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletionStage;
 
@@ -88,7 +82,7 @@ public class HomeController extends Controller {
         List<Terminal> finalTerminals = new ArrayList<>(terminalList.values());
         Collections.sort(finalTerminals);
 
-        dbBuilder(finalTerminals);
+        new DatabaseBuilder(database, finalTerminals);
 
         //Return terminals from HashMap as Json
         return ok(Json.toJson(finalTerminals));
@@ -108,55 +102,6 @@ public class HomeController extends Controller {
 
         // Attempt to request the CSV.
         return futureResponse.toCompletableFuture().get();
-    }
-
-    public void dbBuilder(List<Terminal> terms) {
-        Connection connection = database.getConnection();
-
-        try {
-            String createStatement = "CREATE TABLE IF NOT EXISTS terminals (timestamp TIMESTAMP";
-            String insertStatement = "INSERT INTO terminals (timestamp";
-            for (String name : TerminalMap.terminalNames) {
-                createStatement += ", \"" + name + "\" DECIMAL";
-                insertStatement += ", \"" + name + "\"";
-
-            }
-            createStatement += ")";
-
-            insertStatement += ") VALUES (?";
-            for  (int i = 0; i < TerminalMap.terminalNames.size(); i++) {
-                insertStatement += ", ?";
-            }
-            insertStatement += ")";
-
-            connection.prepareCall(createStatement).execute();
-
-            CallableStatement insert = connection.prepareCall(insertStatement);
-
-            try {
-                Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(terms.get(0).terminalTimestamp);
-                Timestamp timestamp = new Timestamp(date.getTime());
-                insert.setTimestamp(1, timestamp);
-            } catch (ParseException e) {
-                System.out.println(e.toString());
-            }
-
-            for (Terminal terminal : terms ) {
-                int i = 2;
-                for (String terminalName : TerminalMap.terminalNames) {
-                    if (terminal.terminalName.equals(terminalName)) {
-                        insert.setDouble(i, terminal.terminalFlow);
-                    } else { i += 1;}
-                }
-            }
-            insert.execute();
-            connection.close();
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
 }
