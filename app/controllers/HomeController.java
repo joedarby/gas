@@ -82,7 +82,7 @@ public class HomeController extends Controller {
         List<Terminal> finalTerminals = new ArrayList<>(terminalList.values());
         Collections.sort(finalTerminals);
 
-        new DatabaseBuilder(database, finalTerminals);
+        new DatabaseBuilder(database, finalTerminals).dbInsertTerminal();
 
         //Return terminals from HashMap as Json
         return ok(Json.toJson(finalTerminals));
