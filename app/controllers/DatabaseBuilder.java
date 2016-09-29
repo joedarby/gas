@@ -64,7 +64,10 @@ public class DatabaseBuilder {
         String timestampText = timestamp.toString().substring(0,21);
         System.out.println(timestampText);
         String selectStatement = "SELECT 1 FROM terminals WHERE timestamp = \'" + timestamp +"\'";
-        return connection.prepareCall(selectStatement).executeQuery().first();
+        //Next two lines allow the query to be "scrollable" so that the first() method will work.
+        Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        ResultSet result = stmt.executeQuery(selectStatement);
+        return result.first();
     }
 
     private void dbInsert() throws SQLException {
