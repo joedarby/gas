@@ -1,6 +1,7 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -9,7 +10,7 @@ import java.util.HashMap;
 @SuppressWarnings("WeakerAccess")
 public class Terminal implements Comparable<Terminal> {
     public String terminalName;
-    public String terminalTimestamp;
+    public Date terminalTimestamp;
     public double terminalFlow = 0.0;
     public final ArrayList<Pipeline> pipelines = new ArrayList<>();
     private static final HashMap<String, String> PIPELINE_TRANSLATE = new HashMap<>();

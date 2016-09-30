@@ -1,5 +1,6 @@
 package controllers;
 
+import data.ConvertTimestamp;
 import data.Pipeline;
 import data.Terminal;
 import data.TerminalMap;
@@ -43,7 +44,7 @@ public class HomeController extends Controller {
 
         String pipelineName;
         Double flowValue;
-        String timestamp;
+        Date timestamp;
         HashMap<String, Terminal> terminalList = TerminalMap.initiateTerminalList();
 
       // Look at the name of the first terminal in the csv (ignore line 0 which is a header)
@@ -56,7 +57,7 @@ public class HomeController extends Controller {
                 String[] splitLine = lines[i - 1].split(",");
                 prevPipelineName = splitLine[0];
                 flowValue = Double.parseDouble(splitLine[2]);
-                timestamp = splitLine[3];
+                timestamp = ConvertTimestamp.timestampConverter(splitLine[3]);
 
                 Pipeline pipelineToAdd = new Pipeline(prevPipelineName, flowValue, timestamp);
 

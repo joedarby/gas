@@ -6,7 +6,6 @@ import play.db.Database;
 
 import java.sql.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,11 +15,13 @@ import java.util.List;
 public class DatabaseBuilder {
     private final Connection connection;
     private final List<Terminal> terminals;
-    private Timestamp timestamp;
+    private Timestamp sqlTimestamp;
 
     public DatabaseBuilder(Database database, List<Terminal> terms) {
         connection = database.getConnection();
         terminals = terms;
+        Date timestamp = terms.get(0).terminalTimestamp;
+        sqlTimestamp = new Timestamp(timestamp.getTime());
     }
 
     public void dbInsertTerminal() {
@@ -59,11 +60,7 @@ public class DatabaseBuilder {
     }
 
     private boolean dbCheckDuplicate() throws SQLException, ParseException {
-        Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(terminals.get(0).terminalTimestamp);
-        timestamp = new Timestamp(date.getTime());
-        String timestampText = timestamp.toString().substring(0,21);
-        System.out.println(timestampText);
-        String selectStatement = "SELECT 1 FROM terminals WHERE timestamp = \'" + timestamp +"\'";
+        String selectStatement = "SELECT 1 FROM terminals WHERE timestamp = \'" + sqlTimestamp +"\'";
         //Next two lines allow the query to be "scrollable" so that the first() method will work.
         Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         ResultSet result = stmt.executeQuery(selectStatement);
@@ -74,7 +71,7 @@ public class DatabaseBuilder {
         String insertStatement = getInsertStatement();
 
         CallableStatement insert = connection.prepareCall(insertStatement);
-        insert.setTimestamp(1, timestamp);
+        insert.setTimestamp(1, sqlTimestamp);
         for (Terminal terminal : terminals) {
             int i = 2;
             for (String terminalName : TerminalMap.terminalNames) {

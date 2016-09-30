@@ -25,11 +25,7 @@ public class LinepackDataSet {
         forecastDemand = Double.parseDouble(doc.getElementById("ctl00_cphForecast_tdDemandD").text());
         forecastFlow = Double.parseDouble(doc.getElementById("ctl00_cphForecast_tdForecastFlow1").text());
 
-        if (PCLP >= OLP) {
-            oversupply = true;
-        } else {
-            oversupply = false;
-        }
+        oversupply = PCLP >= OLP;
 
         sysImbalance = PCLP - OLP;
 

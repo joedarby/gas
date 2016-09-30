@@ -2,8 +2,6 @@ package controllers;
 
 import data.TerminalMap;
 import play.db.Database;
-import play.libs.Json;
-import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
