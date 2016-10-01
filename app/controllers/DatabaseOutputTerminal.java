@@ -2,6 +2,7 @@ package controllers;
 
 import data.ConvertTimestamp;
 import data.TerminalDataPoint;
+import data.TerminalHistory;
 import play.db.Database;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -23,7 +24,7 @@ public class DatabaseOutputTerminal extends Controller {
     Database database;
 
     public Result index(String terminalName) {
-        List<TerminalDataPoint> dataList = new ArrayList<>();
+        TerminalHistory history = new TerminalHistory();
         Connection connection = database.getConnection();
 
         try {
@@ -32,17 +33,13 @@ public class DatabaseOutputTerminal extends Controller {
             ResultSet result = statement.executeQuery();
             while(result.next()) {
                 String rawTS = result.getString(1);
-                System.out.println(rawTS);
-                Date timestamp = ConvertTimestamp.timestampConverter2(rawTS);
-                String flow = String.format(Locale.UK, "%.2f", Double.parseDouble(result.getString(2)));
-                TerminalDataPoint dataPoint = new TerminalDataPoint(timestamp, flow);
-                dataList.add(dataPoint);
-            }
+                String rawFlow = result.getString(2);
+                history.addDatapoint(rawTS, rawFlow);
+                            }
 
             connection.close();
 
-            Collections.sort(dataList);
-            return ok(Json.toJson(dataList));
+            return ok(Json.toJson(history));
 
         } catch (SQLException e) {
             return internalServerError(e.toString());
