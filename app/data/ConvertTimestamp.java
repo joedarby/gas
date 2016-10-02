@@ -20,7 +20,7 @@ public class ConvertTimestamp {
     }
 
     public static Date timestampConverter2(String rawTS) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
             return df.parse(rawTS);
         } catch (ParseException e) {
