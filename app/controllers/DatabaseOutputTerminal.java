@@ -1,7 +1,5 @@
 package controllers;
 
-import data.ConvertTimestamp;
-import data.TerminalDataPoint;
 import data.TerminalHistory;
 import play.db.Database;
 import play.libs.Json;
@@ -13,7 +11,6 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
 
 /**
  * Created by Joe on 23/09/2016.

@@ -1,15 +1,12 @@
 package data;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by Joe on 01/10/2016.
  */
 public class TerminalHistory {
-    public static List<TerminalDataPoint> data;
+    public List<TerminalDataPoint> data = new ArrayList<>();
 
     public void addDatapoint(String rawTS, String rawFlow) {
         Date timestamp = ConvertTimestamp.timestampConverter2(rawTS);
