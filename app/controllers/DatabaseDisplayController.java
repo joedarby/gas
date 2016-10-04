@@ -32,6 +32,7 @@ public class DatabaseDisplayController extends Controller {
             CallableStatement statement = connection.prepareCall("SELECT * FROM terminals");
             ResultSet result = statement.executeQuery();
 
+            //For each row in the result, add the timestamp at position 1, and all of the flow values in the row, to the output string
             while(result.next()) {
                 output += result.getString(1);
                 for (int i = 2; i < (TerminalMap.TERMINAL_NAMES.size()+2); i++) {
@@ -44,7 +45,7 @@ public class DatabaseDisplayController extends Controller {
             connection.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return ok(output);

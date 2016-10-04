@@ -38,7 +38,7 @@ public class TerminalIndexController extends Controller {
 
         List<Terminal> finalTerminals = getTerminals(csvLines);
 
-        new GasDatabase(database).CheckAndAddToDatabase(finalTerminals);
+        new GasDatabase(database).checkAndAddToDatabase(finalTerminals);
 
         //Return terminals from HashMap as Json
         return ok(Json.toJson(finalTerminals));
@@ -56,13 +56,9 @@ public class TerminalIndexController extends Controller {
         // Look through each line in the csv. When the terminal name changes, add the last line for the current terminal (most recent data) to the terminal list
         for (String line : csvLines) {
             String pipelineName = line.split(",")[0];
-            if (!Objects.equals(prevPipelineName, pipelineName)) {
-                String[] splitLine = prevLine.split(",");
-                prevPipelineName = splitLine[0];
-                Double flowValue = Double.parseDouble(splitLine[2]);
-                Date timestamp = ConvertTimestamp.rawTimestampToFormattedTimestamp(splitLine[3]);
-
-                Pipeline pipelineToAdd = new Pipeline(prevPipelineName, flowValue, timestamp);
+            if (!prevPipelineName.equals(pipelineName)) {
+                Pipeline pipelineToAdd = csvLineToPipeline(prevLine);
+                prevPipelineName = pipelineToAdd.pipelineName;
 
                 // If the new terminal maps into a terminal group, add to the existing group, otherwise create and add its own group
                 if (TerminalMap.getTerminal(prevPipelineName) == null) {
@@ -86,19 +82,32 @@ public class TerminalIndexController extends Controller {
 
     private ArrayList<String> getAndSplitTerminalCSV() throws Exception {
         // Call the requestCSVFile method returning response
-        WSResponse response;
-        response = requestCSVFile();
+        WSResponse response = requestCSVFile();
         String body = response.getBody();
         ArrayList<String> lines = new ArrayList<>(Arrays.asList(body.split("\n")));
-        lines.remove(0);
-        int endIndex = 0;
-        for (String line : lines) {
+        lines.remove(0); //remove the csv header
+
+        boolean foundTerminalHeader = false;
+        Iterator<String> iterator = lines.iterator();
+        while(iterator.hasNext()) {
+            String line = iterator.next();
             if (line.startsWith("Terminal")) {
-                endIndex = lines.indexOf(line);
+                foundTerminalHeader = true;
+            }
+            // Remove terminal header and anything after it
+            if(foundTerminalHeader) {
+                iterator.remove();
             }
         }
-        lines.subList(endIndex + 1, lines.size()).clear();
         return lines;
+    }
+
+    private Pipeline csvLineToPipeline (String line) {
+        String[] splitLine = line.split(",");
+        String prevPipelineName = splitLine[0];
+        Double flowValue = Double.parseDouble(splitLine[2]);
+        Date timestamp = ConvertTimestamp.rawTimestampToFormattedTimestamp(splitLine[3]);
+        return new Pipeline(prevPipelineName, flowValue, timestamp);
     }
 
 

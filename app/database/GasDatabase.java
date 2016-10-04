@@ -21,7 +21,7 @@ public class GasDatabase {
         connection = database.getConnection();
     }
 
-    public void CheckAndAddToDatabase(List<Terminal> terms) {
+    public void checkAndAddToDatabase(List<Terminal> terms) {
         terminals = terms;
         Date timestamp = terms.get(0).terminalTimestamp;
         sqlTimestamp = new Timestamp(timestamp.getTime());
