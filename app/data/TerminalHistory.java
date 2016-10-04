@@ -9,7 +9,7 @@ public class TerminalHistory {
     public List<TerminalDataPoint> data = new ArrayList<>();
 
     public void addDatapoint(String rawTS, String rawFlow) {
-        Date timestamp = ConvertTimestamp.timestampConverter2(rawTS);
+        Date timestamp = ConvertTimestamp.rawTimestampToFormattedTimestampWithSeconds(rawTS);
         String flow = String.format(Locale.UK, "%.2f", Double.parseDouble(rawFlow));
         TerminalDataPoint dataPoint = new TerminalDataPoint(timestamp, flow);
         data.add(dataPoint);

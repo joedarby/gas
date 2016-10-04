@@ -23,7 +23,7 @@ public class DatabaseDisplayController extends Controller {
     public Result index() {
         Connection connection = database.getConnection();
         String output = "timestamp";
-        for (String term : TerminalMap.terminalNames) {
+        for (String term : TerminalMap.TERMINAL_NAMES) {
             output += " " + term;
         }
         output += "\n";
@@ -34,7 +34,7 @@ public class DatabaseDisplayController extends Controller {
 
             while(result.next()) {
                 output += result.getString(1);
-                for (int i = 2; i < (TerminalMap.terminalNames.size()+2); i++) {
+                for (int i = 2; i < (TerminalMap.TERMINAL_NAMES.size()+2); i++) {
                     String item = String.format(Locale.UK, "%.2f", Double.parseDouble(result.getString(i)));
                     output += " " + item;
                 }

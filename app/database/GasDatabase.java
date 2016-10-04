@@ -1,4 +1,4 @@
-package controllers;
+package database;
 
 import data.Terminal;
 import data.TerminalMap;
@@ -12,26 +12,27 @@ import java.util.List;
 /**
  * Created by Joe on 28/09/2016.
  */
-public class DatabaseBuilder {
+public class GasDatabase {
     private final Connection connection;
-    private final List<Terminal> terminals;
+    private List<Terminal> terminals;
     private Timestamp sqlTimestamp;
 
-    public DatabaseBuilder(Database database, List<Terminal> terms) {
+    public GasDatabase(Database database) {
         connection = database.getConnection();
+    }
+
+    public void CheckAndAddToDatabase(List<Terminal> terms) {
         terminals = terms;
         Date timestamp = terms.get(0).terminalTimestamp;
         sqlTimestamp = new Timestamp(timestamp.getTime());
-    }
 
-    public void dbInsertTerminal() {
         try {
             connection.prepareCall(getCreateStatement()).execute();
             if (!dbCheckDuplicate()) {
                 dbInsert();
-            } else {
-                connection.close();
             }
+            connection.close();
+
         } catch (SQLException | ParseException e) {
             throw new RuntimeException(e);
         }
@@ -39,7 +40,7 @@ public class DatabaseBuilder {
 
     private String getCreateStatement() {
         String createStatement = "CREATE TABLE IF NOT EXISTS terminals (timestamp TIMESTAMP";
-        for (String name : TerminalMap.terminalNames) {
+        for (String name : TerminalMap.TERMINAL_NAMES) {
             createStatement += ", \"" + name + "\" DECIMAL";
         }
         createStatement += ")";
@@ -48,11 +49,11 @@ public class DatabaseBuilder {
 
     private String getInsertStatement() {
         String insertStatement = "INSERT INTO terminals (timestamp";
-        for (String name : TerminalMap.terminalNames) {
+        for (String name : TerminalMap.TERMINAL_NAMES) {
             insertStatement += ", \"" + name + "\"";
         }
         insertStatement += ") VALUES (?";
-        for (int i = 0; i < TerminalMap.terminalNames.size(); i++) {
+        for (int i = 0; i < TerminalMap.TERMINAL_NAMES.size(); i++) {
             insertStatement += ", ?";
         }
         insertStatement += ")";
@@ -74,7 +75,7 @@ public class DatabaseBuilder {
         insert.setTimestamp(1, sqlTimestamp);
         for (Terminal terminal : terminals) {
             int i = 2;
-            for (String terminalName : TerminalMap.terminalNames) {
+            for (String terminalName : TerminalMap.TERMINAL_NAMES) {
                 if (terminal.terminalName.equals(terminalName)) {
                     insert.setDouble(i, terminal.terminalFlow);
                 } else {
@@ -83,7 +84,6 @@ public class DatabaseBuilder {
             }
         }
         insert.execute();
-        connection.close();
     }
 
 

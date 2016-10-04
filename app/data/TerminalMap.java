@@ -8,51 +8,49 @@ import java.util.Set;
  * Created by Joe on 03/09/2016.
  */
 public class TerminalMap {
-    private final HashMap<String, String> terminalMapping = new HashMap<>();
-    public static Set<String> terminalNames = new HashSet<>();
+    public static final HashMap<String, String> TERMINAL_MAPPING = new HashMap<>();
+    public static Set<String> TERMINAL_NAMES = new HashSet<>();
+    static {
+        TERMINAL_MAPPING.put("BACTON BBL", "Bacton IP");
+        TERMINAL_MAPPING.put("BACTON IC", "Bacton IP");
+        TERMINAL_MAPPING.put("BACTON PERENCO", "Bacton UKCS");
+        TERMINAL_MAPPING.put("BACTON SEAL", "Bacton UKCS");
+        TERMINAL_MAPPING.put("BACTON SHELL", "Bacton UKCS");
+        TERMINAL_MAPPING.put("ST FERGUS MOBIL", "St Fergus");
+        TERMINAL_MAPPING.put("ST FERGUS NSMP", "St Fergus");
+        TERMINAL_MAPPING.put("ST FERGUS SHELL", "St Fergus");
+        TERMINAL_MAPPING.put("TEESSIDE PX", "Teesside");
+        TERMINAL_MAPPING.put("TEESSIDE BP", "Teesside");
+        TERMINAL_MAPPING.put("ALDBROUGH", "Medium Range Storage");
+        TERMINAL_MAPPING.put("HILLTOP", "Medium Range Storage");
+        TERMINAL_MAPPING.put("HOLE HOUSE FARM", "Medium Range Storage");
+        TERMINAL_MAPPING.put("HOLFORD", "Medium Range Storage");
+        TERMINAL_MAPPING.put("HORNSEA", "Medium Range Storage");
+        TERMINAL_MAPPING.put("STUBLACH", "Medium Range Storage");
+        TERMINAL_MAPPING.put("GRAIN NTS 1", "Isle of Grain");
+        TERMINAL_MAPPING.put("GRAIN NTS 2", "Isle of Grain");
+        TERMINAL_MAPPING.put("EASINGTON DIMLINGTON", "Easington");
+        TERMINAL_MAPPING.put("EASINGTON LANGELED", "Easington");
+        TERMINAL_MAPPING.put("AVONMOUTH", "LNG Storage");
+        TERMINAL_MAPPING.put("GLENMAVIS", "LNG Storage");
+        TERMINAL_MAPPING.put("DYNEVOR ARMS", "LNG Storage");
+        TERMINAL_MAPPING.put("PARTINGTON", "LNG Storage");
+        TERMINAL_MAPPING.put("MILFORD HAVEN - SOUTH HOOK", "Milford Haven");
+        TERMINAL_MAPPING.put("MILFORD HAVEN - DRAGON", "Milford Haven");
+        TERMINAL_MAPPING.put("THEDDLETHORPE", "Theddlethorpe");
+        TERMINAL_MAPPING.put("BARROW SOUTH", "Barrow");
+        TERMINAL_MAPPING.put("EASINGTON ROUGH", "Rough Storage");
 
-    private TerminalMap() {
-
-        terminalMapping.put("BACTON BBL", "Bacton IP");
-        terminalMapping.put("BACTON IC", "Bacton IP");
-        terminalMapping.put("BACTON PERENCO", "Bacton UKCS");
-        terminalMapping.put("BACTON SEAL", "Bacton UKCS");
-        terminalMapping.put("BACTON SHELL", "Bacton UKCS");
-        terminalMapping.put("ST FERGUS MOBIL", "St Fergus");
-        terminalMapping.put("ST FERGUS NSMP", "St Fergus");
-        terminalMapping.put("ST FERGUS SHELL", "St Fergus");
-        terminalMapping.put("TEESSIDE PX", "Teesside");
-        terminalMapping.put("TEESSIDE BP", "Teesside");
-        terminalMapping.put("ALDBROUGH", "Medium Range Storage");
-        terminalMapping.put("HILLTOP", "Medium Range Storage");
-        terminalMapping.put("HOLE HOUSE FARM", "Medium Range Storage");
-        terminalMapping.put("HOLFORD", "Medium Range Storage");
-        terminalMapping.put("HORNSEA", "Medium Range Storage");
-        terminalMapping.put("STUBLACH", "Medium Range Storage");
-        terminalMapping.put("GRAIN NTS 1", "Isle of Grain");
-        terminalMapping.put("GRAIN NTS 2", "Isle of Grain");
-        terminalMapping.put("EASINGTON DIMLINGTON", "Easington");
-        terminalMapping.put("EASINGTON LANGELED", "Easington");
-        terminalMapping.put("AVONMOUTH", "LNG Storage");
-        terminalMapping.put("GLENMAVIS", "LNG Storage");
-        terminalMapping.put("DYNEVOR ARMS", "LNG Storage");
-        terminalMapping.put("PARTINGTON", "LNG Storage");
-        terminalMapping.put("MILFORD HAVEN - SOUTH HOOK", "Milford Haven");
-        terminalMapping.put("MILFORD HAVEN - DRAGON", "Milford Haven");
-        terminalMapping.put("THEDDLETHORPE", "Theddlethorpe");
-        terminalMapping.put("BARROW SOUTH", "Barrow");
-        terminalMapping.put("EASINGTON ROUGH", "Rough Storage");
-
-        terminalNames.addAll(terminalMapping.values());
-
+        TERMINAL_NAMES.addAll(TERMINAL_MAPPING.values());
     }
+
+
 
     //Given pipeline name, return terminal name
     public static String getTerminal(String tName) {
-        HashMap map = new TerminalMap().terminalMapping;
         String terminalToAddTo;
-        if (map.containsKey(tName)) {
-            terminalToAddTo = (String) map.get(tName);
+        if (TERMINAL_MAPPING.containsKey(tName)) {
+            terminalToAddTo = TERMINAL_MAPPING.get(tName);
         } else {
             terminalToAddTo = null;
         }
@@ -61,9 +59,8 @@ public class TerminalMap {
 
     // Generate an empty HashMap of the terminals
     public static HashMap<String, Terminal> initiateTerminalList() {
-        Set<String> terminalNames = new TerminalMap().terminalNames;
         HashMap<String, Terminal> terminalList = new HashMap<>();
-        for (String terminalName : terminalNames) {
+        for (String terminalName : TERMINAL_NAMES) {
             Terminal terminal = new Terminal(terminalName);
             terminalList.put(terminalName, terminal);
         }

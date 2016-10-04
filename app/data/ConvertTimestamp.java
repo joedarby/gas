@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class ConvertTimestamp {
 
-    public static Date timestampConverter(String rawTS){
+    public static Date rawTimestampToFormattedTimestamp(String rawTS){
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         try {
             return df.parse(rawTS);
@@ -19,7 +19,7 @@ public class ConvertTimestamp {
         }
     }
 
-    public static Date timestampConverter2(String rawTS) {
+    public static Date rawTimestampToFormattedTimestampWithSeconds(String rawTS) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
             return df.parse(rawTS);
