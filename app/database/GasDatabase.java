@@ -1,6 +1,8 @@
 package database;
 
+import data.Pipeline;
 import data.Terminal;
+import data.TerminalHelper;
 import data.TerminalMap;
 import play.db.Database;
 
@@ -40,6 +42,9 @@ public class GasDatabase {
 
     private String getCreateStatement() {
         String createStatement = "CREATE TABLE IF NOT EXISTS terminals (timestamp TIMESTAMP";
+        for (String name : TerminalHelper.PIPELINE_TRANSLATE.values()) {
+            createStatement += ", \"" + name + "\" DECIMAL";
+        }
         for (String name : TerminalMap.TERMINAL_NAMES) {
             createStatement += ", \"" + name + "\" DECIMAL";
         }
@@ -49,10 +54,16 @@ public class GasDatabase {
 
     private String getInsertStatement() {
         String insertStatement = "INSERT INTO terminals (timestamp";
+        for (String name : TerminalHelper.PIPELINE_TRANSLATE.values()) {
+            insertStatement += ", \"" + name + "\"";
+        }
         for (String name : TerminalMap.TERMINAL_NAMES) {
             insertStatement += ", \"" + name + "\"";
         }
         insertStatement += ") VALUES (?";
+        for (int i = 0; i < TerminalHelper.PIPELINE_TRANSLATE.values().size(); i++) {
+            insertStatement += ", ?";
+        }
         for (int i = 0; i < TerminalMap.TERMINAL_NAMES.size(); i++) {
             insertStatement += ", ?";
         }
@@ -74,7 +85,20 @@ public class GasDatabase {
         CallableStatement insert = connection.prepareCall(insertStatement);
         insert.setTimestamp(1, sqlTimestamp);
         for (Terminal terminal : terminals) {
-            int i = 2;
+            for (Pipeline pipeline : terminal.pipelines) {
+                int i = 2;
+                for (String pipelineName : TerminalHelper.PIPELINE_TRANSLATE.values()) {
+                    if (pipeline.pipelineName.equals(pipelineName)) {
+                        insert.setDouble(i, pipeline.flowValue);
+                    } else {
+                        i += 1;
+                    }
+                }
+
+            }
+        }
+        for (Terminal terminal : terminals) {
+            int i = 31;
             for (String terminalName : TerminalMap.TERMINAL_NAMES) {
                 if (terminal.terminalName.equals(terminalName)) {
                     insert.setDouble(i, terminal.terminalFlow);

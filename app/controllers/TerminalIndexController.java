@@ -74,6 +74,8 @@ public class TerminalIndexController extends Controller {
             prevLine = line;
         }
 
+
+
         List<Terminal> finalTerminals = new ArrayList<>(terminalList.values());
         Collections.sort(finalTerminals);
         return finalTerminals;
@@ -99,6 +101,7 @@ public class TerminalIndexController extends Controller {
                 iterator.remove();
             }
         }
+        lines.add("End Line");
         return lines;
     }
 

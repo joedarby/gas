@@ -34,8 +34,8 @@ public class TerminalHelper {
         PIPELINE_TRANSLATE.put("PARTINGTON", "Partington");
         PIPELINE_TRANSLATE.put("MILFORD HAVEN - SOUTH HOOK", "South Hook");
         PIPELINE_TRANSLATE.put("MILFORD HAVEN - DRAGON", "Dragon");
-        PIPELINE_TRANSLATE.put("THEDDLETHORPE", "Theddlethorpe");
+        PIPELINE_TRANSLATE.put("THEDDLETHORPE", "Theddlethorpe NTS");
         PIPELINE_TRANSLATE.put("BARROW SOUTH", "Barrow South");
-        PIPELINE_TRANSLATE.put("EASINGTON ROUGH", "Rough Storage");
+        PIPELINE_TRANSLATE.put("EASINGTON ROUGH", "Rough LRS");
     }
 }
