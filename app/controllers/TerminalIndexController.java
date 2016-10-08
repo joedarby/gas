@@ -7,6 +7,7 @@ import data.TerminalMap;
 import database.GasDatabase;
 import play.db.Database;
 import play.libs.Json;
+import play.libs.ws.WS;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
@@ -28,17 +29,8 @@ public class TerminalIndexController extends Controller {
     Database database;
 
     public Result terminalIndex() {
-        ArrayList<String> csvLines;
 
-        try {
-            csvLines = getAndSplitTerminalCSV();
-        } catch (Exception e) {
-            return internalServerError(e.toString());
-        }
-
-        List<Terminal> finalTerminals = getTerminals(csvLines);
-
-        new GasDatabase(database).checkAndAddToDatabase(finalTerminals);
+        List<Terminal> finalTerminals = DataRefresh(ws, database);
 
         //Return terminals from HashMap as Json
         return ok(Json.toJson(finalTerminals));
@@ -46,7 +38,24 @@ public class TerminalIndexController extends Controller {
 
     }
 
-    private List<Terminal> getTerminals(ArrayList<String> csvLines) {
+    public static List<Terminal> DataRefresh(WSClient wsClient, Database db) {
+        ArrayList<String> csvLines;
+
+        try {
+            csvLines = getAndSplitTerminalCSV(wsClient);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        List<Terminal> finalTerminals = getTerminals(csvLines);
+        new GasDatabase(db).checkAndAddToDatabase(finalTerminals);
+
+        return finalTerminals;
+
+
+    }
+
+    private static List<Terminal> getTerminals(ArrayList<String> csvLines) {
         HashMap<String, Terminal> terminalList = TerminalMap.initiateTerminalList();
 
         // Look at the first line in the returned csv lines
@@ -82,9 +91,9 @@ public class TerminalIndexController extends Controller {
 
     }
 
-    private ArrayList<String> getAndSplitTerminalCSV() throws Exception {
+    private static ArrayList<String> getAndSplitTerminalCSV(WSClient ws) throws Exception {
         // Call the requestCSVFile method returning response
-        WSResponse response = requestCSVFile();
+        WSResponse response = requestCSVFile(ws);
         String body = response.getBody();
         ArrayList<String> lines = new ArrayList<>(Arrays.asList(body.split("\n")));
         lines.remove(0); //remove the csv header
@@ -105,7 +114,7 @@ public class TerminalIndexController extends Controller {
         return lines;
     }
 
-    private Pipeline csvLineToPipeline (String line) {
+    private static Pipeline csvLineToPipeline (String line) {
         String[] splitLine = line.split(",");
         String prevPipelineName = splitLine[0];
         Double flowValue = Double.parseDouble(splitLine[2]);
@@ -114,7 +123,7 @@ public class TerminalIndexController extends Controller {
     }
 
 
-    private WSResponse requestCSVFile() throws Exception {
+    private static WSResponse requestCSVFile(WSClient ws) throws Exception {
         // We need to request the CSV file from the national grid website
         //
         // This requires us to do a POST request to their server, passing some hard coded form parameters in the body
@@ -126,6 +135,8 @@ public class TerminalIndexController extends Controller {
         // Attempt to request the CSV.
         return futureResponse.toCompletableFuture().get();
     }
+
+
 
 
 
