@@ -2,6 +2,7 @@ package data;
 
 import play.db.Database;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -40,7 +41,8 @@ public class TerminalHistoryHelper {
         ChartData chartData = new ChartData();
         long startTime = setChartStart();
         for (TerminalDataPoint dp : history.data) {
-            float flow = Float.parseFloat(dp.flowRate);
+            //float flow = Float.parseFloat(dp.flowRate);
+            BigDecimal flow = dp.flowRate;
             long dpMillis = dp.timestamp.getTime();
             if (dpMillis > startTime) {
                 float timeIndex = (dpMillis - startTime) / 1000f / 60f;

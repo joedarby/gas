@@ -2,6 +2,7 @@ package data;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -10,9 +11,9 @@ import java.util.Date;
 public class TerminalDataPoint implements Comparable<TerminalDataPoint> {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     public Date timestamp;
-    public  String flowRate;
+    public BigDecimal flowRate;
 
-    public TerminalDataPoint(Date time, String flow) {
+    public TerminalDataPoint(Date time, BigDecimal flow) {
         timestamp = time;
         flowRate = flow;
     }
