@@ -8,6 +8,11 @@ import java.util.*;
  */
 public class TerminalHistory {
     public List<TerminalDataPoint> data = new ArrayList<>();
+    public String pipelineName;
+
+    public TerminalHistory(String name) {
+        pipelineName = name;
+    }
 
     public void addDatapoint(String rawTS, String rawFlow) {
         Date timestamp = ConvertTimestamp.rawTimestampToFormattedTimestampWithSeconds(rawTS);

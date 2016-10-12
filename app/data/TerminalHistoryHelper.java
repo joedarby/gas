@@ -7,14 +7,16 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * Created by Joe on 05/10/2016.
  */
 public class TerminalHistoryHelper {
     public static TerminalHistory getTerminalHistory(Database database, String terminalName) {
-        TerminalHistory history = new TerminalHistory();
+        TerminalHistory history = new TerminalHistory(terminalName);
         Connection connection = database.getConnection();
 
         String selectStatement = "SELECT timestamp, \""+ terminalName + "\" FROM terminals";
@@ -36,18 +38,22 @@ public class TerminalHistoryHelper {
 
     }
 
-    //Takes a terminal history dataset and returns a chart data object, a wrapper of a hashmap containing time indexes (minutes since the chart start point) and flow values.
-    public static ChartData getChartData(TerminalHistory history) {
+    //Takes a terminal history dataset and returns a chart data object, a wrapper of hashmaps containing time indexes (minutes since the chart start point) and flow values.
+    public static ChartData getChartData(ArrayList<TerminalHistory> historyObjects) {
         ChartData chartData = new ChartData();
         long startTime = setChartStart();
-        for (TerminalDataPoint dp : history.data) {
-            //float flow = Float.parseFloat(dp.flowRate);
-            BigDecimal flow = dp.flowRate;
-            long dpMillis = dp.timestamp.getTime();
-            if (dpMillis > startTime) {
-                float timeIndex = (dpMillis - startTime) / 1000f / 60f;
-                chartData.dataList.put(timeIndex, flow);
+        for (TerminalHistory history : historyObjects) {
+            HashMap<Float, BigDecimal> pipelineChartData = new HashMap<>();
+            for (TerminalDataPoint dp : history.data) {
+                BigDecimal flow = dp.flowRate;
+                long dpMillis = dp.timestamp.getTime();
+                if (dpMillis > startTime) {
+                    float timeIndex = (dpMillis - startTime) / 1000f / 60f;
+                    pipelineChartData.put(timeIndex, flow);
+                }
             }
+            chartData.dataList.put(history.pipelineName, pipelineChartData);
+
         }
         return chartData;
     }
