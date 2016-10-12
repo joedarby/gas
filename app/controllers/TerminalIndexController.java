@@ -62,14 +62,14 @@ public class TerminalIndexController extends Controller {
         String prevPipelineName = csvLines.get(0).split(",")[0];
         String prevLine = csvLines.get(0);
 
-        // Look through each line in the csv. When the terminal name changes, add the last line for the current terminal (most recent data) to the terminal list
+        // Look through each line in the csv. When the pipeline name changes, add the last line for the current pipeline (most recent data) to the terminal list
         for (String line : csvLines) {
             String pipelineName = line.split(",")[0];
             if (!prevPipelineName.equals(pipelineName)) {
                 Pipeline pipelineToAdd = csvLineToPipeline(prevLine);
                 prevPipelineName = pipelineToAdd.pipelineName;
 
-                // If the new terminal maps into a terminal group, add to the existing group, otherwise create and add its own group
+                // If the new pipeline maps into an existing terminal, add to the existing terminal, otherwise create and add its own terminal
                 if (TerminalMap.getTerminal(prevPipelineName) == null) {
                     Terminal singlePipeline = new Terminal(prevPipelineName);
                     singlePipeline.addPipeline(pipelineToAdd);
@@ -87,6 +87,9 @@ public class TerminalIndexController extends Controller {
 
         List<Terminal> finalTerminals = new ArrayList<>(terminalList.values());
         Collections.sort(finalTerminals);
+        for (Terminal terminal : finalTerminals) {
+            Collections.sort(terminal.pipelines);
+        }
         return finalTerminals;
 
     }
