@@ -4,6 +4,7 @@
 
 GET     /terminals                  controllers.TerminalIndexController.terminalIndex
 GET     /linepack                   controllers.LinepackController.index
+GET     /norway                     controllers.NorwayController.index
 GET     /db                         controllers.DatabaseDisplayController.index
 GET     /db/:name                   controllers.TerminalHistoryController.index(name)
 GET     /chart/:name                controllers.ChartDataController.index(name)

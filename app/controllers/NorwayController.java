@@ -1,22 +1,18 @@
 package controllers;
 
 import data.HTMLGetter;
-import data.LinepackDataSet;
-import org.jsoup.Jsoup;
+import data.NorwayDataSet;
 import org.jsoup.nodes.Document;
 import play.libs.Json;
 import play.libs.ws.WSClient;
-import play.libs.ws.WSResponse;
+import play.libs.ws.WSCookie;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
+import java.util.List;
 
-/**
- * Created by Joe on 20/09/2016.
- */
-public class LinepackController extends Controller{
+public class NorwayController extends Controller{
 
     @Inject
     private WSClient ws;
@@ -25,15 +21,18 @@ public class LinepackController extends Controller{
 
         Document doc;
         try {
-             doc = HTMLGetter.getHTMLDocument(ws, "http://marketinformation.natgrid.co.uk/gas/frmPrevalingView.aspx");
+            List<WSCookie> cookies = HTMLGetter.getCookies(ws, "http://flow.gassco.no/");
+            WSCookie cookie = cookies.get(0);
+            doc = HTMLGetter.getNorwayHTMLDocument(ws, "http://flow.gassco.no/acceptDisclaimer", cookie);
         } catch (Exception e) {
             return internalServerError(e.toString());
         }
 
-        LinepackDataSet data = new LinepackDataSet(doc);
+        NorwayDataSet data = new NorwayDataSet(doc);
 
         return ok(Json.toJson(data));
 
 
     }
+
 }

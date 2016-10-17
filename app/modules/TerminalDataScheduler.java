@@ -18,8 +18,8 @@ public class TerminalDataScheduler {
     @Inject
     public TerminalDataScheduler(ActorSystem actorSystem, WSClient wsClient, Database database) {
         actorSystem.scheduler().schedule(
-                Duration.create(30, TimeUnit.SECONDS), //Initial delay 0 milliseconds
-                Duration.create(20, TimeUnit.SECONDS),     //Frequency 10 seconds
+                Duration.create(30, TimeUnit.SECONDS), //Initial delay 30 seconds
+                Duration.create(30, TimeUnit.SECONDS),     //Frequency 30 seconds
                 new Runnable() {
                     @Override
                     public void run() {
