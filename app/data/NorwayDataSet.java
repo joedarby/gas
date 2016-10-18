@@ -4,6 +4,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.Collections;
 import java.util.HashMap;
 
 public class NorwayDataSet {
@@ -17,7 +18,24 @@ public class NorwayDataSet {
         for (Element flow : flows) {
             String heading = flow.getElementsByClass("heading").text();
             Double flowVal = Double.parseDouble(flow.getElementsByClass("value").text());
-            norwayFlows.put(heading,flowVal);
+
+            switch (heading) {
+                case "Entry SEGAL Pipeline System": {
+                    norwayFlows.put("SEGAL", flowVal);
+                    break;
+                }
+                case "St. Fergus": {
+                    norwayFlows.put("Vesterled", flowVal);
+                    break;
+                }
+                case "Easington": {
+                    norwayFlows.put("Langeled", flowVal);
+                    break;
+                }
+                default: norwayFlows.put(heading,flowVal);
+            }
+
+
 
         }
 
