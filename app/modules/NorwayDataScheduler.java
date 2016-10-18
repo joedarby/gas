@@ -1,6 +1,7 @@
 package modules;
 
 import akka.actor.*;
+import controllers.NorwayController;
 import controllers.TerminalIndexController;
 import play.Logger;
 import play.db.Database;
@@ -13,21 +14,21 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Singleton
-public class TerminalDataScheduler {
+public class NorwayDataScheduler {
 
     @Inject
-    public TerminalDataScheduler(ActorSystem actorSystem, WSClient wsClient, Database database) {
+    public NorwayDataScheduler(ActorSystem actorSystem, WSClient wsClient, Database database) {
         actorSystem.scheduler().schedule(
-                Duration.create(30, TimeUnit.SECONDS), //Initial delay 30 seconds
+                Duration.create(10, TimeUnit.SECONDS), //Initial delay 10 seconds
                 Duration.create(30, TimeUnit.SECONDS),     //Frequency 30 seconds
                 new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            TerminalIndexController.DataRefresh(wsClient, database);
-                            Logger.info("UK data refreshed at " + new Date().toString());
+                            NorwayController.DataRefresh(wsClient, database);
+                            Logger.info("Norway data refreshed at " + new Date().toString());
                         } catch (Exception e) {
-                            Logger.error("Get NG csv file failed" + new Date().toString());
+                            Logger.error("Get norway data failed" + new Date().toString());
                         }
                     }
                 },

@@ -14,12 +14,12 @@ import java.util.List;
 /**
  * Created by Joe on 28/09/2016.
  */
-public class GasDatabase {
+public class UKDatabase {
     private final Connection connection;
     private List<Terminal> terminals;
     private Timestamp sqlTimestamp;
 
-    public GasDatabase(Database database) {
+    public UKDatabase(Database database) {
         connection = database.getConnection();
     }
 

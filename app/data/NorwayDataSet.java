@@ -1,17 +1,22 @@
 package data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 public class NorwayDataSet {
 
     public HashMap<String, Double> norwayFlows = new HashMap<>();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss z")
+    public Date timestamp;
 
     public NorwayDataSet(Document doc) {
+
+        timestamp = Calendar.getInstance().getTime();
+
 
         Elements flows = doc.getElementsByClass("flow");
 

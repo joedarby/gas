@@ -6,6 +6,7 @@ GET     /terminals                  controllers.TerminalIndexController.terminal
 GET     /linepack                   controllers.LinepackController.index
 GET     /norway                     controllers.NorwayController.index
 GET     /db                         controllers.DatabaseDisplayController.index
+GET     /norway-db                  controllers.NorwayDatabaseDisplayController.index
 GET     /db/:name                   controllers.TerminalHistoryController.index(name)
 GET     /chart/:name                controllers.ChartDataController.index(name)
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

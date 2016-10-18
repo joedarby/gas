@@ -4,10 +4,10 @@ import data.ConvertTimestamp;
 import data.Pipeline;
 import data.Terminal;
 import data.TerminalMap;
-import database.GasDatabase;
+import database.UKDatabase;
+import play.Logger;
 import play.db.Database;
 import play.libs.Json;
-import play.libs.ws.WS;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
@@ -30,25 +30,21 @@ public class TerminalIndexController extends Controller {
 
     public Result terminalIndex() {
 
-        List<Terminal> finalTerminals = DataRefresh(ws, database);
-
-        //Return terminals from HashMap as Json
-        return ok(Json.toJson(finalTerminals));
-
+        try {
+            List<Terminal> finalTerminals = DataRefresh(ws, database);
+            return ok(Json.toJson(finalTerminals));
+        } catch (Exception e) {
+            return internalServerError(e.toString());
+        }
 
     }
 
-    public static List<Terminal> DataRefresh(WSClient wsClient, Database db) {
+    public static List<Terminal> DataRefresh(WSClient wsClient, Database db) throws Exception {
         ArrayList<String> csvLines;
-
-        try {
-            csvLines = getAndSplitTerminalCSV(wsClient);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        csvLines = getAndSplitTerminalCSV(wsClient);
 
         List<Terminal> finalTerminals = getTerminals(csvLines);
-        new GasDatabase(db).checkAndAddToDatabase(finalTerminals);
+        new UKDatabase(db).checkAndAddToDatabase(finalTerminals);
 
         return finalTerminals;
 
