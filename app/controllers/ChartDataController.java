@@ -19,12 +19,12 @@ public class ChartDataController extends Controller {
     @Inject
     Database database;
 
-    public Result index(String terminalNames) {
+    public Result index(String terminalNames, String UKorNorway) {
         String[] splitNames = terminalNames.split(",");
         ArrayList<TerminalHistory> historyObjects = new ArrayList<>();
 
         for (String name : splitNames) {
-            TerminalHistory history = TerminalHistoryHelper.getTerminalHistory(database, name);
+            TerminalHistory history = TerminalHistoryHelper.getTerminalHistory(database, name, UKorNorway);
             historyObjects.add(history);
         }
 

@@ -15,11 +15,19 @@ import java.util.HashMap;
  * Created by Joe on 05/10/2016.
  */
 public class TerminalHistoryHelper {
-    public static TerminalHistory getTerminalHistory(Database database, String terminalName) {
+    public static TerminalHistory getTerminalHistory(Database database, String terminalName, String UKorNorway) {
         TerminalHistory history = new TerminalHistory(terminalName);
         Connection connection = database.getConnection();
 
-        String selectStatement = "SELECT timestamp, \""+ terminalName + "\" FROM terminals";
+        String selectStatement = "SELECT timestamp, \""+ terminalName + "\" FROM ";
+
+        switch (UKorNorway) {
+            case "uk": selectStatement += "terminals";
+                break;
+            case "norway": selectStatement += "norway";
+                break;
+        }
+
 
         try{
             CallableStatement statement = connection.prepareCall(selectStatement);

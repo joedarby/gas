@@ -17,8 +17,8 @@ public class TerminalHistoryController extends Controller {
     @Inject
     Database database;
 
-    public Result index(String terminalName) {
-        TerminalHistory history = TerminalHistoryHelper.getTerminalHistory(database, terminalName);
+    public Result index(String terminalName, String UKorNorway) {
+        TerminalHistory history = TerminalHistoryHelper.getTerminalHistory(database, terminalName, UKorNorway);
 
         return ok(Json.toJson(history));
     }

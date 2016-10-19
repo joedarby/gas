@@ -5,8 +5,10 @@
 GET     /terminals                  controllers.TerminalIndexController.terminalIndex
 GET     /linepack                   controllers.LinepackController.index
 GET     /norway                     controllers.NorwayController.index
-GET     /db                         controllers.DatabaseDisplayController.index
-GET     /norway-db                  controllers.NorwayDatabaseDisplayController.index
-GET     /db/:name                   controllers.TerminalHistoryController.index(name)
-GET     /chart/:name                controllers.ChartDataController.index(name)
+GET     /db/uk                      controllers.DatabaseDisplayController.index
+GET     /db/norway                  controllers.NorwayDatabaseDisplayController.index
+GET     /db/uk/:name                controllers.TerminalHistoryController.index(name, UKorNorway = "uk")
+GET     /db/norway/:name            controllers.TerminalHistoryController.index(name, UKorNorway = "norway")
+GET     /chart/uk/:name             controllers.ChartDataController.index(name, UKorNorway = "uk")
+GET     /chart/norway/:name         controllers.ChartDataController.index(name, UKorNorway = "norway")
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
