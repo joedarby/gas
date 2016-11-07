@@ -1,11 +1,13 @@
 package controllers;
 
+import play.Logger;
 import play.db.Database;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.sql.*;
+import java.util.Date;
 
 /**
  * Created by Joe on 07/11/2016.
@@ -20,7 +22,6 @@ public class DatabaseCleanerController extends Controller {
 
         Timestamp cutOffTimestamp = new Timestamp(System.currentTimeMillis() - (14 * 24 * 60 * 60 * 1000));
         String ukStatementString = "DELETE FROM terminals WHERE timestamp < \'" + cutOffTimestamp + "\'";
-        System.out.println(ukStatementString);
 
         String output = "UK rows deleted = ";
 
@@ -31,11 +32,11 @@ public class DatabaseCleanerController extends Controller {
 
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            Logger.error("UK database clean failed" + new Date().toString());
+
     }
 
         String norwayStatementString = "DELETE FROM norway WHERE timestamp < \'" + cutOffTimestamp + "\'";
-        System.out.println(norwayStatementString);
 
         output += "Norway rows deleted = ";
 
@@ -47,10 +48,12 @@ public class DatabaseCleanerController extends Controller {
             connection.close();
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            Logger.error("Norway database clean failed" + new Date().toString());
         }
 
-        
+        Logger.info("Database cleaned at " + new Date().toString() + " up to " + cutOffTimestamp.toString());
+
+
     return ok(output);
 
     }
