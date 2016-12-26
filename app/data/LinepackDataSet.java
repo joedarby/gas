@@ -1,6 +1,7 @@
 package data;
 
 import org.jsoup.nodes.Document;
+import play.Logger;
 
 /**
  * Created by Joe on 20/09/2016.
@@ -17,7 +18,7 @@ public class LinepackDataSet {
 
 
     public LinepackDataSet(Document doc) {
-        OLP = Double.parseDouble(doc.getElementById("ctl00_cphActual_txtOpening").text());
+        OLP = Double.parseDouble(doc.getElementsByAttributeValueContaining("data-bind","OpeningValue").get(0).text());
         OLPDate = doc.getElementById("ctl00_cphActual_lblOpeningdt").text();
         PCLP = Double.parseDouble(doc.getElementById("ctl00_cphForecast_tdPredicted1").text());
         PCLPTime = doc.getElementById("ctl00_cphForecast_tdPredicted2").text();

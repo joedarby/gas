@@ -42,6 +42,9 @@ public class TerminalIndexController extends Controller {
     public static List<Terminal> DataRefresh(WSClient wsClient, Database db) throws Exception {
         ArrayList<String> csvLines;
         csvLines = getAndSplitTerminalCSV(wsClient);
+        for (int i = 0; i < csvLines.size(); i ++) {
+            csvLines.set(i, csvLines.get(i).replace("\"",""));
+        }
 
         List<Terminal> finalTerminals = getTerminals(csvLines);
         new UKDatabase(db).checkAndAddToDatabase(finalTerminals);
@@ -127,9 +130,8 @@ public class TerminalIndexController extends Controller {
         //
         // This requires us to do a POST request to their server, passing some hard coded form parameters in the body
         // of the request
-        CompletionStage<WSResponse> futureResponse = ws.url("http://energywatch.natgrid.co.uk/EDP-PublicUI/Public/InstantaneousFlowsIntoNTS.aspx?CalledFrom=nguk")
-                .setContentType("application/x-www-form-urlencoded")
-                .post("__EVENTTARGET=a1&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwULLTEyMjEyNjg2NzlkGAIFDmd2SW5zdGFudFRhYmxlDzwrAAoBCAIBZAUGdGFibGUzDzwrAAoBCAIBZJ7q2q75hRISuNNRLVb%2BQrFJ%2Bj5M&__VIEWSTATEGENERATOR=27867E27&__EVENTVALIDATION=%2FwEWAwL%2Bn5W7DgK%2F7%2BbtDALDmNLsDhsc68eKkomPaNlEXMwXYS14SX%2Bw");
+        CompletionStage<WSResponse> futureResponse = ws.url("http://mip-prod-web.azurewebsites.net/InstantaneousViewFileDownload/DownloadFile").get();
+                //.post("__EVENTTARGET=a1&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwULLTEyMjEyNjg2NzlkGAIFDmd2SW5zdGFudFRhYmxlDzwrAAoBCAIBZAUGdGFibGUzDzwrAAoBCAIBZJ7q2q75hRISuNNRLVb%2BQrFJ%2Bj5M&__VIEWSTATEGENERATOR=27867E27&__EVENTVALIDATION=%2FwEWAwL%2Bn5W7DgK%2F7%2BbtDALDmNLsDhsc68eKkomPaNlEXMwXYS14SX%2Bw");
 
         // Attempt to request the CSV.
         return futureResponse.toCompletableFuture().get();

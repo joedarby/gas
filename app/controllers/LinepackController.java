@@ -25,7 +25,7 @@ public class LinepackController extends Controller{
 
         Document doc;
         try {
-             doc = HTMLGetter.getHTMLDocument(ws, "http://marketinformation.natgrid.co.uk/gas/frmPrevalingView.aspx");
+             doc = HTMLGetter.getHTMLDocument(ws,"http://mip-prod-web.azurewebsites.net/PrevailingView");
         } catch (Exception e) {
             return internalServerError(e.toString());
         }
