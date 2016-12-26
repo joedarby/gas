@@ -1,11 +1,7 @@
 package data;
 
-import org.jsoup.nodes.Document;
-import play.Logger;
+import com.fasterxml.jackson.databind.JsonNode;
 
-/**
- * Created by Joe on 20/09/2016.
- */
 public class LinepackDataSet {
     public String OLPDate;
     public String PCLPTime;
@@ -17,14 +13,14 @@ public class LinepackDataSet {
     public Double sysImbalance;
 
 
-    public LinepackDataSet(Document doc) {
-        OLP = Double.parseDouble(doc.getElementsByAttributeValueContaining("data-bind","OpeningValue").get(0).text());
-        OLPDate = doc.getElementById("ctl00_cphActual_lblOpeningdt").text();
-        PCLP = Double.parseDouble(doc.getElementById("ctl00_cphForecast_tdPredicted1").text());
-        PCLPTime = doc.getElementById("ctl00_cphForecast_tdPredicted2").text();
-        PCLPTime = PCLPTime.substring(1, PCLPTime.length()-1);
-        forecastDemand = Double.parseDouble(doc.getElementById("ctl00_cphForecast_tdDemandD").text());
-        forecastFlow = Double.parseDouble(doc.getElementById("ctl00_cphForecast_tdForecastFlow1").text());
+    public LinepackDataSet(JsonNode json) {
+        OLP = json.get("actualDataModel").get("actualLinepackDataModel").get("actualLinepackOpeningValue").get("value").doubleValue();
+        OLPDate = json.get("actualDataModel").get("actualLinepackDataModel").get("actualLinepackOpeningValue").get("applicableFor").textValue().substring(0,10);
+        PCLP = json.get("forecastViewModel").get("predictedClosingLinePackValue").get("value").doubleValue();
+        PCLPTime = json.get("forecastViewModel").get("predictedClosingLinePackValue").get("applicableAt").textValue().substring(11,16);
+        forecastDemand = json.get("forecastViewModel").get("forecastDemandTodayValue").get("value").doubleValue();
+        forecastFlow = json.get("forecastViewModel").get("forecastFlowValue").get("value").doubleValue();
+
 
         oversupply = PCLP >= OLP;
 

@@ -1,12 +1,11 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import data.HTMLGetter;
 import data.LinepackDataSet;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import play.libs.Json;
 import play.libs.ws.WSClient;
-import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -29,11 +28,20 @@ public class LinepackController extends Controller{
         } catch (Exception e) {
             return internalServerError(e.toString());
         }
+        JsonNode json = getJson(doc);
 
-        LinepackDataSet data = new LinepackDataSet(doc);
+        LinepackDataSet data = new LinepackDataSet(json);
 
         return ok(Json.toJson(data));
 
 
+    }
+
+    private JsonNode getJson(Document doc) {
+        String rawDoc = doc.toString()
+                .split("var dynamicData=")[1]
+                .split(";")[0];
+
+        return Json.parse(rawDoc);
     }
 }
